@@ -1,7 +1,7 @@
 import React from 'react'
 import {useState,useEffect} from 'react'
 import * as qs from 'qs'
-import {cleanObject}  from '../utils'
+import {cleanObject,useMount}  from '../utils'
 import {SearchPanel} from './search-panel'
 import {List} from './list'
 
@@ -10,7 +10,7 @@ const apiUrl = process.env.REACT_APP_API_URL
 export const ProjectListScreen = ()=>{
   const [list, setList] = useState([])
   const [users, setUsers] = useState([])
-  const [param,setParam] = useState({
+  const [param, setParam] = useState({
     name:'',
     personId:''
   })
@@ -23,13 +23,13 @@ export const ProjectListScreen = ()=>{
     })
   },[param])
 
-  useEffect(()=>{
-    fetch(`${apiUrl}/users`).then(async res=>{
+  useMount(
+    ()=>fetch(`${apiUrl}/users`).then(async res=>{
       if(res.ok){
         setUsers(await res.json())
       }
     })
-  },[])
+  )
 
   return <div>
     <SearchPanel param={param} setParam={setParam} users={users} />
