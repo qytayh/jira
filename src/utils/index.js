@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const isFalsy = (value) => (value === 0 ? false : !value);
 
@@ -17,5 +17,16 @@ export const cleanObject = (object) => {
 export const useMount = (callback) => {
   useEffect(() => {
     callback();
-  });
+  }, []);
+};
+
+export const useDebounce = (value, delay) => {
+  const [debounceValue, setDebounceValue] = useState(value);
+  useEffect(() => {
+    //在每次value变化后设置一个定时器
+    const timeout = setTimeout(() => setDebounceValue(value), delay);
+    // 每次在上一个useEffect处理完以后啊再运行
+    return () => clearTimeout(timeout);
+  }, [value, delay]);
+  return debounceValue;
 };
